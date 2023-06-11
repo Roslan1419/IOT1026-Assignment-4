@@ -3,7 +3,7 @@
     <img src="https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/ci.yml/badge.svg"/>
     </a>
 	<a href="https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/formatting.yml">
-    <img src="https://github.com/GwGibson/IOT1026-Assignment-4/actions/workflows/formatting.yml/badge.svg"/>
+    <img src="https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/formatting.yml/badge.svg"/>
 	<br/>
     <a href="https://codecov.io/gh/Roslan1419/IOT1026-Assignment-4" > 
     <img src="https://codecov.io/gh/Roslan1419/IOT1026-Assignment-4/branch/main/graph/badge.svg?token=JS0857X5JD"/> 
