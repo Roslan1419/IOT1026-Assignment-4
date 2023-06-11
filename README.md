@@ -12,8 +12,8 @@
 </p>
 
 # IOT1026-Assignment-4
-
-Write a description of the project here and don't forget to update the badges.  
+        
+[![ci](https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/ci.yml/badge.svg?branch=Command-implentation)](https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/ci.yml) 
 
 [Assignment Instructions](docs/instructions.md)  
 [How to start coding](docs/how-to-use.md)  
