@@ -13,7 +13,8 @@
 
 # IOT1026-Assignment-4
         
-[![ci](https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/ci.yml/badge.svg?branch=Command-implentation)](https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/ci.yml) 
+
+        [![ci](https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/ci.yml/badge.svg?branch=Command-implentation)](https://github.com/Roslan1419/IOT1026-Assignment-4/actions/workflows/ci.yml) 
 
 [Assignment Instructions](docs/instructions.md)  
 [How to start coding](docs/how-to-use.md)  
