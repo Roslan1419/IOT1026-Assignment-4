@@ -1,70 +1,70 @@
-// Change to 'using Assignment.InterfaceCommand' when you are ready to test your interface implementation
 using Assignment.InterfaceCommand;
 
-namespace Assignment
+namespace Assignment;
+
+public class Robot
 {
-    public class Robot
+    public int NumCommands { get; }
+    public int X { get; set; }
+    public int Y { get; set; }
+    public bool IsPowered { get; set; }
+
+    private const int DefaultCommands = 6;
+    //with new type of collect we can control the number of commands in a better way
+    private readonly Queue<RobotCommand> _commands;
+    private int _commandsLoaded = 0;
+
+    /// <summary>
+    /// Returns a string representation of the robot's current state.
+    /// </summary>
+    /// <returns>A string representation of the robot's current state.</returns>
+    public override string ToString()
     {
-        // These are properties, you can replace these with traditional getters/setters if you prefer.
-        public int NumCommands { get; }
+        return $"[{X} {Y} {IsPowered}]";
+    }
 
-        // These properties are not good! The setter allows
-        // us to move the robot even if it's off
-        public int X { get; set; }
-        public int Y { get; set; }
-        public bool IsPowered { get; set; }
+    public Robot() : this(DefaultCommands) { }
 
-        private const int DefaultCommands = 6;
-        // An array is not the preferred data structure here.
-        // You will get bonus marks if you replace the array with the preferred data structure
-        // Hint: It is NOT a list either.
-        private readonly IRobotCommand[] _commands;
-        private int _commandsLoaded = 0;
+    /// <summary>
+    /// Constructor that initializes the robot with the capacity to store a user specified
+    /// number of commands
+    /// </summary>
+    /// <param name="numCommands">The maximum number of commands the robot can store</param>
+    public Robot(int numCommands)
+    {
+        _commands = new Queue<RobotCommand>(numCommands);
+        NumCommands = numCommands;
+    }
 
-        public override string ToString()
+    /// <summary>
+    /// Executes the loaded commands in the robot's queue.
+    /// </summary>
+    /// <returns><c>true</c> if the commands were executed successfully; otherwise, <c>false</c>.</returns>
+    public bool Run()
+    {
+        if (_commands.Count == 0)
+            return false;
+
+        while (_commands.Count > 0)
         {
-            return $"[{X} {Y} {IsPowered}]";
+            var command = _commands.Dequeue();
+            command.Run(this);
+            Console.WriteLine(this);
         }
+        return true;
+    }
 
-        // You should not have to use any of the methods below here, but you should
-        // provide XML documentation for the parameterized constructor, the Run method, and one
-        // of the LoadCommand methods.
-        public Robot() : this(DefaultCommands) { }
-
-        /// <summary>
-        /// Constructor that initializes the robot with the capacity to store a user-specified
-        /// number of commands.
-        /// </summary>
-        /// <param name="numCommands">The maximum number of commands the robot can store</param>
-        public Robot(int numCommands)
-        {
-            _commands = new IRobotCommand[numCommands];
-            NumCommands = numCommands;
-        }
-
-        /// <summary>
-        /// Executes the loaded commands sequentially.
-        /// </summary>
-        public void Run()
-        {
-            for (var i = 0; i < _commandsLoaded; ++i)
-            {
-                _commands[i].Run(this);
-                Console.WriteLine(this);
-            }
-        }
-
-        /// <summary>
-        /// Loads a command into the robot's command storage.
-        /// </summary>
-        /// <param name="command">The command to load</param>
-        /// <returns>True if the command was successfully loaded, False otherwise</returns>
-        public bool LoadCommand(IRobotCommand command)
-        {
-            if (_commandsLoaded >= NumCommands)
-                return false;
-            _commands[_commandsLoaded++] = command;
-            return true;
-        }
+    /// <summary>
+    /// Loads a command into the robot's queue.
+    /// </summary>
+    /// <param name="command">The command to be loaded.</param>
+    /// <returns><c>true</c> if the command was loaded successfully; otherwise, <c>false</c>.</returns>
+    public bool LoadCommand(RobotCommand command)
+    {
+        if (_commandsLoaded >= NumCommands)
+            return false;
+        _commands.Enqueue(command);
+        _commandsLoaded++;
+        return true;
     }
 }
