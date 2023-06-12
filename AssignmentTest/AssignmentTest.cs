@@ -1,5 +1,6 @@
-﻿using Assignment;
-using Assignment.AbstractCommand; // Change to Assignment.InterfaceCommand when rdy
+using System.Reflection;
+using Assignment;
+using Assignment.InterfaceCommand;
 
 namespace AssignmentTest
 {
@@ -7,27 +8,80 @@ namespace AssignmentTest
     public class AssignmentTests
     {
         [TestMethod]
-        public void PropertiesTest()
+        public void DummyTest()
         {
-            Robot robot1 = new();
-            Assert.AreEqual(robot1.NumCommands, 6);
-            const int ExpectedCommands = 10;
-            Robot robot2 = new(ExpectedCommands);
-            Assert.AreEqual(robot2.NumCommands, ExpectedCommands);
+            Assert.AreNotSame(1, 2);
+        }
 
-            Assert.AreEqual(robot1.IsPowered, false);
-            robot1.IsPowered = true;
-            Assert.AreEqual(robot1.IsPowered, true);
+        [TestMethod]
+        public void TestRun_Without_Commands()
+        {
+            Robot robot = new Robot();
 
-            Assert.AreEqual(robot1.X, 0);
-            // Moves the robot can move even though it is off!!
-            // This is very bad! Not good encapsulation
-            robot1.X = -5;
-            Assert.AreEqual(robot1.X, -5);
+            robot.Run();
 
-            Assert.AreEqual(robot1.Y, 0);
-            robot1.Y = -5;
-            Assert.AreEqual(robot1.Y, -5);
+            Assert.AreEqual(0, robot.X);
+            Assert.AreEqual(0, robot.Y);
+            Assert.IsFalse(robot.IsPowered);
+        }
+
+        [TestMethod]
+        public void TestLoadCommand_LoadedSuccessfully()
+        {
+            Robot robot = new Robot();
+            RobotCommand command = new WestCommand();
+
+            bool result = robot.LoadCommand(command);
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void LoadCommand_CommandLimitExceeded()
+        {
+            Robot robot = new Robot(1);
+            RobotCommand command1 = new WestCommand();
+            RobotCommand command2 = new OnCommand();
+
+            bool result1 = robot.LoadCommand(command1);
+            bool result2 = robot.LoadCommand(command2);
+
+            Assert.IsTrue(result1);
+
+            // Assert that the second command fails to load because the command limit exceeded
+            Assert.IsFalse(result2);
+        }
+
+        [TestMethod]
+        public void TestCheckCommand_CommandExists()
+        {
+            var tester = new RobotTester();
+            var commandName = "West";
+
+            var supportCommandsField = typeof(RobotTester).GetField("_supportCommands", BindingFlags.NonPublic | BindingFlags.Instance);
+            supportCommandsField.SetValue(tester, new List<string> { "West" });
+
+            var checkCommandMethod = typeof(RobotTester).GetMethod("CheckCommand", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            bool result = (bool)checkCommandMethod.Invoke(tester, new object[] { commandName });
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void TestCheckCommand_CommandDoesNotExist()
+        {
+            var tester = new RobotTester();
+            var commandName = "East";
+
+            var supportCommandsField = typeof(RobotTester).GetField("_supportCommands", BindingFlags.NonPublic | BindingFlags.Instance);
+            supportCommandsField.SetValue(tester, new List<string> { "West" });
+
+            var checkCommandMethod = typeof(RobotTester).GetMethod("CheckCommand", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            bool result = (bool)checkCommandMethod.Invoke(tester, new object[] { commandName });
+
+            Assert.IsFalse(result);
         }
     }
 }
